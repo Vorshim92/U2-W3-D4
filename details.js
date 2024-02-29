@@ -37,6 +37,7 @@ function generateDetailCard(photo) {
   </div>`;
   const backBtn = containerCard.querySelector("#back");
   backBtn.addEventListener("click", function (e) {
+    localStorage.setItem("backBtn", true);
     window.location.href = "./index.html";
   });
 }
