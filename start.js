@@ -1,3 +1,8 @@
+// VARIABILI GLOBALI
+const primaryBtn = document.getElementById("primaryBtn");
+const secondaryBtn = document.getElementById("secondaryBtn");
+const searchForm = document.getElementById("searchType");
+const sessionStorageAlbum = "album";
 async function getAlbum(query) {
   try {
     const params = new URLSearchParams(new URL(query).search);
@@ -13,33 +18,30 @@ async function getAlbum(query) {
     if (!response.ok) {
       throw new Error("Errore nella richiesta API");
     }
-    const albums = await response.json();
-    return albums;
+    const album = await response.json();
+    sessionStorage.setItem(sessionStorageAlbum, JSON.stringify(album.photos));
   } catch (error) {
     console.error("Errore durante il recupero dei libri:", error);
   }
 }
 
-const primaryBtn = document.getElementById("primaryBtn");
-const secondaryBtn = document.getElementById("secondaryBtn");
-const searchForm = document.getElementById("searchType");
-
+// funzione di callback per gli addeventlistener vari
 async function handleQuery(url) {
   try {
-    const albums = await getAlbum(url);
-    console.log(albums);
+    const album = await getAlbum(url);
+    console.log(album);
     const container = document.querySelector("#rowId");
     container.innerHTML = "";
-    albums.photos.forEach((photo) => {
+    album.photos.forEach((photo) => {
       const cardHtml = `<div class="card mb-4 shadow-sm">
-      <img src="${photo.src.original}" class="bd-placeholder-img card-img-top">
+      <img src="${photo.src.portrait}" class="bd-placeholder-img card-img-top">
       <div class="card-body">
         <h5 class="card-title">${photo.alt}</h5>
         <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
         <div class="d-flex justify-content-between align-items-center">
           <div class="btn-group">
-            <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-            <button type="button" class="btn btn-sm btn-outline-secondary hide">Hide</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary" id="view">View</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary" id="hide">Hide</button>
           </div>
           <small class="text-muted">ID: ${photo.id}</small>
         </div>
@@ -50,9 +52,21 @@ async function handleQuery(url) {
       cardElement.innerHTML = cardHtml;
       container.appendChild(cardElement);
 
-      const hideBtn = cardElement.querySelector(".hide");
-      hideBtn.addEventListener("click", function () {
+      const hideBtn = cardElement.querySelector("#hide");
+      hideBtn.addEventListener("click", function (e) {
         cardElement.parentNode.removeChild(cardElement);
+      });
+      const viewBtn = cardElement.querySelector("#view");
+      viewBtn.addEventListener("click", function (e) {
+        const modal = document.getElementById("myModal");
+        const modalImg = document.getElementById("modalImg");
+        const closeModalBtn = document.querySelector(".close");
+        modal.style.display = "block";
+        modalImg.src = photo.src.portrait;
+        closeModalBtn.addEventListener("click", function (e) {
+          modal.style.display = "none";
+          modalImg.src = "";
+        });
       });
     });
   } catch (error) {
@@ -60,10 +74,6 @@ async function handleQuery(url) {
   }
 }
 
-//todo: creare funzione che prende il valore da un pulsante lista e lo passa come parametro alla query dell'url del secondo pulsante
-// facendoti scegliere così la tipologia del secondary button
-
-function fetchParams(params) {}
 window.onload = () => {
   primaryBtn.addEventListener("click", () => handleQuery("https://api.pexels.com/v1/search?query=nature&per_page=10"));
   secondaryBtn.addEventListener("click", () => handleQuery("https://api.pexels.com/v1/search?query=science&per_page=10"));
