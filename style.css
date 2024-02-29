@@ -84,4 +84,5 @@ footer p {
   font-size: 35px;
   font-weight: bold;
   cursor: pointer;
+  z-index: 9999;
 }

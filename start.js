@@ -39,7 +39,7 @@ function createAlbum(album) {
   container.innerHTML = "";
   album.photos.forEach((photo) => {
     const cardHtml = `<div class="card mb-4 shadow-sm">
-        <img src="${photo.src.portrait}" class="bd-placeholder-img card-img-top cursor-pointer">
+        <img src="${photo.src.tiny}" class="bd-placeholder-img card-img-top cursor-pointer">
         <div class="card-body">
           <h5 class="card-title cursor-pointer">${photo.alt}</h5>
           <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
@@ -76,19 +76,19 @@ function createAlbum(album) {
     const imgCard = cardElement.querySelector("img");
     const titleCard = cardElement.querySelector("h5");
     imgCard.addEventListener("click", function (e) {
-      saveLocalStorageKeys(photo);
-      window.location.href = "./photo-details.html";
+      // saveLocalStorageKeys(photo);
+      window.location.href = `./photo-details.html?id=${photo.id}`;
     });
     titleCard.addEventListener("click", function (e) {
-      saveLocalStorageKeys(photo);
-      window.location.href = "./photo-details.html";
+      // saveLocalStorageKeys(photo);
+      window.location.href = `./photo-details.html?id=${photo.id}`;
     });
   });
 }
 
-function saveLocalStorageKeys(photo) {
-  localStorage.setItem(localStoragePhoto, JSON.stringify(photo.id));
-}
+// function saveLocalStorageKeys(photo) {
+//   localStorage.setItem(localStoragePhoto, JSON.stringify(photo.id));
+// }
 
 window.onload = () => {
   primaryBtn.addEventListener("click", () => handleQuery("nature"));
@@ -104,5 +104,5 @@ window.onload = () => {
     localStorage.removeItem("backBtn");
   }
   localStorage.removeItem(localStorageQuery);
-  localStorage.removeItem(localStoragePhoto);
+  // localStorage.removeItem(localStoragePhoto);
 };

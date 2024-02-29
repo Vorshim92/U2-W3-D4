@@ -1,5 +1,7 @@
-const localStoragePhoto = "photoID";
-const photoID = JSON.parse(localStorage.getItem(localStoragePhoto));
+// const localStoragePhoto = "photoID";
+// const photoID = JSON.parse(localStorage.getItem(localStoragePhoto));
+
+const photoID = new URLSearchParams(new URL(window.location.href).search).get("id");
 
 async function getPhoto(id) {
   try {
