@@ -14,6 +14,7 @@ async function getPhoto(id) {
       throw new Error("Errore nella richiesta API");
     }
     const photo = await response.json();
+    document.body.style.backgroundColor = photo.avg_color;
     console.log(photo);
     generateDetailCard(photo);
   } catch (error) {
