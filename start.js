@@ -43,9 +43,9 @@ function createAlbum(album) {
   container.innerHTML = "";
   album.photos.forEach((photo) => {
     const cardHtml = `<div class="card mb-4 shadow-sm">
-        <img src="${photo.src.portrait}" class="bd-placeholder-img card-img-top">
+        <img src="${photo.src.portrait}" class="bd-placeholder-img card-img-top cursor-pointer">
         <div class="card-body">
-          <h5 class="card-title">${photo.alt}</h5>
+          <h5 class="card-title cursor-pointer">${photo.alt}</h5>
           <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
           <div class="d-flex justify-content-between align-items-center">
             <div class="btn-group">
@@ -79,8 +79,12 @@ function createAlbum(album) {
     });
     const imgCard = cardElement.querySelector("img");
     const titleCard = cardElement.querySelector("h5");
-    imgCard.addEventListener("click", function (e) {});
-    titleCard.addEventListener("click", function (e) {});
+    imgCard.addEventListener("click", function (e) {
+      localStorage.setItem(localStoragePhoto, JSON.stringify(photo));
+    });
+    titleCard.addEventListener("click", function (e) {
+      localStorage.setItem(localStoragePhoto, JSON.stringify(photo));
+    });
   });
 }
 
