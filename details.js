@@ -12,6 +12,7 @@ async function getPhoto(id) {
       throw new Error("Errore nella richiesta API");
     }
     const photo = await response.json();
+    console.log(photo);
     generateDetailCard(photo);
   } catch (error) {
     console.error("Errore durante il recupero dei libri:", error);
@@ -21,10 +22,11 @@ async function getPhoto(id) {
 function generateDetailCard(photo) {
   const containerCard = document.getElementById("photoCard");
   containerCard.innerHTML = `<div class="card mb-4 shadow-sm">
-    <img src="${photo.src.small}" class="bd-placeholder-img card-img-top cursor-pointer">
+    <img src="${photo.src.portrait}" class="bd-placeholder-img card-img-top">
     <div class="card-body">
-      <h5 class="card-title cursor-pointer">${photo.alt}</h5>
-      <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+      <h5 class="card-title">${photo.alt}</h5>
+      <h5 class="card-text">${photo.photographer}</h5>
+      <a href="${photo.photographer_url}" class="card-text">${photo.photographer_url}</a>
       <div class="d-flex justify-content-between align-items-center">
         <div class="btn-group">
           <button type="button" class="btn btn-sm btn-outline-secondary" id="back">BACK TO MAIN</button>
@@ -33,6 +35,10 @@ function generateDetailCard(photo) {
       </div>
     </div>
   </div>`;
+  const backBtn = containerCard.querySelector("#back");
+  backBtn.addEventListener("click", function (e) {
+    window.location.href = "./index.html";
+  });
 }
 window.onload = () => {
   getPhoto(photoID);
