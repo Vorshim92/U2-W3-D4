@@ -2,13 +2,11 @@
 const primaryBtn = document.getElementById("primaryBtn");
 const secondaryBtn = document.getElementById("secondaryBtn");
 const searchForm = document.getElementById("searchType");
-const localStorageAlbum = "album";
-const localStoragePhoto = "photo";
+const localStorageQuery = "query";
+const localStoragePhoto = "photoID";
 async function getAlbum(query) {
   try {
-    const params = new URLSearchParams(new URL(query).search);
-
-    const queryValue = params.get("query");
+    const queryValue = new URLSearchParams(new URL(query).search).get("query");
 
     console.log(queryValue);
     const response = await fetch(query, {
@@ -20,7 +18,7 @@ async function getAlbum(query) {
       throw new Error("Errore nella richiesta API");
     }
     const album = await response.json();
-    localStorage.setItem(localStorageAlbum, JSON.stringify(album));
+    localStorage.setItem(localStorageQuery, JSON.stringify(queryValue));
     return album;
   } catch (error) {
     console.error("Errore durante il recupero dei libri:", error);
@@ -28,9 +26,9 @@ async function getAlbum(query) {
 }
 
 // funzione di callback per gli addeventlistener vari
-async function handleQuery(url) {
+async function handleQuery(query) {
   try {
-    const album = await getAlbum(url);
+    const album = await getAlbum(`https://api.pexels.com/v1/search?query=${query}&per_page=10`);
     console.log(album);
 
     createAlbum(album);
@@ -80,23 +78,25 @@ function createAlbum(album) {
     const imgCard = cardElement.querySelector("img");
     const titleCard = cardElement.querySelector("h5");
     imgCard.addEventListener("click", function (e) {
-      localStorage.setItem(localStoragePhoto, JSON.stringify(photo));
+      localStorage.setItem(localStoragePhoto, JSON.stringify(photo.id));
+      window.location.href = "./photo-details.html";
     });
     titleCard.addEventListener("click", function (e) {
-      localStorage.setItem(localStoragePhoto, JSON.stringify(photo));
+      localStorage.setItem(localStoragePhoto, JSON.stringify(photo.id));
+      window.location.href = "./photo-details.html";
     });
   });
 }
 
 window.onload = () => {
-  primaryBtn.addEventListener("click", () => handleQuery("https://api.pexels.com/v1/search?query=nature&per_page=10"));
-  secondaryBtn.addEventListener("click", () => handleQuery("https://api.pexels.com/v1/search?query=science&per_page=10"));
+  primaryBtn.addEventListener("click", () => handleQuery("nature"));
+  secondaryBtn.addEventListener("click", () => handleQuery("nature"));
   searchForm.addEventListener("submit", (e) => {
     e.preventDefault();
     const formValue = searchForm.querySelector('input[type="text"]').value;
-    handleQuery(`https://api.pexels.com/v1/search?query=${formValue}&per_page=10`);
+    handleQuery(formValue);
   });
-  if (localStorage.getItem(localStorageAlbum)) {
-    createAlbum(JSON.parse(localStorage.getItem(localStorageAlbum)));
+  if (localStorage.getItem(localStorageQuery)) {
+    handleQuery(localStorage.getItem(localStorageQuery));
   }
 };

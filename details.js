@@ -1,5 +1,23 @@
-const localStoragePhoto = "photo";
-const photo = JSON.parse(localStorage.getItem(localStoragePhoto));
+const localStoragePhoto = "photoID";
+const photoID = JSON.parse(localStorage.getItem(localStoragePhoto));
+
+async function getPhoto(id) {
+  try {
+    const response = await fetch(`https://api.pexels.com/v1/photos/${id}`, {
+      headers: {
+        Authorization: `xYTqi8AxTgbivfEK8KF0COvpDdhs9oL5XVYYKZy1kIKC4ZZt9Mod9T7Z`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error("Errore nella richiesta API");
+    }
+    const photo = await response.json();
+    generateDetailCard(photo);
+  } catch (error) {
+    console.error("Errore durante il recupero dei libri:", error);
+  }
+}
+
 function generateDetailCard(photo) {
   const containerCard = document.getElementById("photoCard");
   containerCard.innerHTML = `<div class="card mb-4 shadow-sm">
@@ -17,5 +35,5 @@ function generateDetailCard(photo) {
   </div>`;
 }
 window.onload = () => {
-  generateDetailCard(photo);
+  getPhoto(photoID);
 };
