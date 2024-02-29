@@ -26,7 +26,7 @@ async function handleQuery(query) {
   try {
     const album = await getAlbum(`https://api.pexels.com/v1/search?query=${query}&per_page=10`);
     console.log(album);
-    localStorage.setItem(localStorageQuery, JSON.stringify(query));
+    localStorage.setItem(localStorageQuery, query);
     console.log(query);
 
     createAlbum(album);

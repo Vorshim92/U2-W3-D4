@@ -21,7 +21,7 @@ async function getPhoto(id) {
 
 function generateDetailCard(photo) {
   const containerCard = document.getElementById("photoCard");
-  containerCard.innerHTML = `<div class="card mb-4 shadow-sm">
+  containerCard.innerHTML = `<div class="card mb-4 shadow-sm" style="width: 500px; margin-inline: auto">
     <img src="${photo.src.portrait}" class="bd-placeholder-img card-img-top">
     <div class="card-body">
       <h5 class="card-title">${photo.alt}</h5>
